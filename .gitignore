@@ -22,3 +22,85 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+# =====================
+# OS / IDE
+# =====================
+.DS_Store
+Thumbs.db
+
+.vscode/
+.idea/
+*.iml
+
+# =====================
+# Logs
+# =====================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# =====================
+# Env / Secrets
+# =====================
+.env
+.env.*
+!.env.example
+
+# =====================
+# Node / Package managers
+# =====================
+node_modules/
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# =====================
+# Builds / caches
+# =====================
+dist/
+build/
+out/
+coverage/
+.cache/
+.tmp/
+temp/
+
+# Vite
+.vite/
+
+# TypeScript
+*.tsbuildinfo
+
+# =====================
+# Backend (Nest)
+# =====================
+backend/dist/
+backend/coverage/
+backend/.nestjs/
+backend/node_modules/
+
+# =====================
+# Prisma
+# =====================
+backend/prisma/generated/
+backend/generated/prisma/
+
+# =====================
+# DB (SQLite)
+# =====================
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+
+# =====================
+# Misc
+# =====================
+*.local

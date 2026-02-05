@@ -1,35 +1,115 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Routes, Route, Navigate, Link } from 'react-router-dom';
+import { useState } from 'react';
 
-function App() {
-  const [count, setCount] = useState(0)
+import GroupsBoard from './admin/pages/GroupsBoard';
+import AuditPage from './admin/pages/AuditPage';
+import LoginPage from './pages/Login';
+import StudentProfile from './pages/StudentProfile';
+import { useAuth } from './context/AuthContext';
+import TeacherGroups from './pages/teacher/TeacherGroups';
+import TeacherGroup from './pages/teacher/TeacherGroup';
+
+function hasToken() {
+  const t = localStorage.getItem('token');
+  return typeof t === 'string' && t.length > 20 && t !== 'null';
+}
+
+function Protected({ authed, children }: { authed: boolean; children: JSX.Element }) {
+  return authed ? children : <Navigate to="/login" replace />;
+}
+
+export default function App() {
+  const { role } = useAuth();
+
+  const [authed, setAuthed] = useState(hasToken());
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <button
+  className="topnav__link"
+  onClick={() => {
+    localStorage.removeItem('token');
+    window.location.href = '/login';
+  }}
+>
+  Выход
+</button>
+{authed && (
+  <nav className="topnav">
+    {role === 'TEACHER' && (
+  <Link to="/teacher/groups">Мои группы</Link>
+)}
+    {role === 'ADMIN' && (
+      <>
+        <Link to="/admin/groups">Группы</Link>
+        <Link to="/admin/audit">Журнал</Link>
+      </>
+    )}
 
-export default App
+    {role === 'STUDENT' && (
+      <Link to="/student/profile">Профиль</Link>
+    )}
+
+    <button
+      onClick={() => {
+        localStorage.removeItem('token');
+        window.location.href = '/login';
+      }}
+    >
+      Выход
+    </button>
+  </nav>
+)}
+
+      <Routes>
+        <Route path="/login" element={<LoginPage onLogin={() => setAuthed(true)} />} />
+
+        <Route path="/" element={<Navigate to="/student/profile" replace />} />
+
+        <Route
+          path="/admin/groups"
+          element={
+            <Protected authed={authed}>
+              <GroupsBoard />
+            </Protected>
+          }
+        />
+
+        <Route
+          path="/admin/audit"
+          element={
+            <Protected authed={authed}>
+              <AuditPage />
+            </Protected>
+          }
+        />
+
+        <Route
+          path="/student/profile"
+          element={
+            <Protected authed={authed}>
+              <StudentProfile />
+            </Protected>
+          }
+        />
+        <Route
+  path="/teacher/groups"
+  element={
+    <Protected authed={authed}>
+      <TeacherGroups />
+    </Protected>
+  }
+/>
+
+<Route
+  path="/teacher/groups/:id"
+  element={
+    <Protected authed={authed}>
+      <TeacherGroup />
+    </Protected>
+  }
+/>
+      </Routes>
+    </>
+  );
+}
