@@ -25,3 +25,13 @@ generated/prisma/
 
 # logs
 *.log
+
+# build artifacts
+dist
+
+# sqlite databases
+prisma/*.db
+*.db
+
+# env
+.env

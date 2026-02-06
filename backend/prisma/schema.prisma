@@ -24,6 +24,8 @@ model User {
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 
+  purchases Purchase[]
+
   // relations
   groups       GroupMember[]
   transactions Transaction[]
@@ -82,12 +84,15 @@ model AuditLog {
 
   actor User? @relation(fields: [actorId], references: [id])
 }
+
 model Product {
-  id        String   @id @default(cuid())
+  id        String     @id @default(cuid())
   title     String
   price     Int
   imageUrl  String?
-  isActive  Boolean  @default(true)
+  isActive  Boolean    @default(true)
+  purchases Purchase[]
+
   createdAt DateTime @default(now())
 }
 
@@ -98,6 +103,6 @@ model Purchase {
   price     Int
   createdAt DateTime @default(now())
 
-  user      User     @relation(fields: [userId], references: [id])
-  product   Product  @relation(fields: [productId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
 }
