@@ -1,73 +1,110 @@
-# React + TypeScript + Vite
+````md
+# lk-dashboard — регламент работы (GitHub → Ubuntu deploy)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Принцип
+**GitHub = единственный источник истины.**  
+На сервере (Ubuntu) код **не правим руками**, сервер только **деплоит** из GitHub командой `school-deploy`.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Ежедневный цикл (VS Code / Windows)
 
-## React Compiler
+### 0) Перейти в папку проекта
+```bash
+cd "C:\Users\mkud2\Downloads\обраховательнаяплатформа\lk-dashboard"
+````
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 1) Перед началом работы (обязательно)
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+git status
+git pull
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2) Внести правки в VS Code
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### 3) Проверить что изменилось
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+git status
+```
+
+### 4) Зафиксировать изменения (commit)
+
+```bash
+git add .
+git commit -m "feat/fix: кратко что сделал"
+```
+
+### 5) Отправить на GitHub
+
+```bash
+git push
+```
+
+---
+
+## Деплой на Ubuntu (после push)
+
+### 6) Зайти на сервер и выполнить деплой
+
+```bash
+ssh admin@155.212.161.21
+sudo /usr/local/bin/school-deploy
+```
+
+---
+
+## Если `git push` не проходит (remote содержит новые коммиты)
+
+### Сценарий A — ты один работаешь (самый частый)
+
+Это значит: **где-то уже появился новый коммит в GitHub** (например, ты пушил с другого ПК/папки).
+Делаем так:
+
+```bash
+git pull --rebase
+git push
+```
+
+---
+
+## Если `git pull` ругается: "You have unstaged changes"
+
+Сначала сохрани локальные правки, подтяни репо, верни правки:
+
+```bash
+git stash push -u -m "wip"
+git pull --rebase
+git stash pop
+```
+
+Дальше снова:
+
+```bash
+git add .
+git commit -m "..."
+git push
+```
+
+---
+
+## Зачем `git pull --rebase` (коротко)
+
+**Причина:** на GitHub уже есть коммит, которого нет у тебя локально.
+**Действие:** `--rebase` переносит твои локальные коммиты поверх новых, чтобы история была ровная (без лишних merge-коммитов).
+Если ты всегда работаешь только с одного места и всегда `git pull` перед правками — `--rebase` почти не понадобится.
+
+---
+
+## Быстрые проверки на сервере (если нужно)
+
+```bash
+sudo -u admin pm2 status
+sudo -u admin pm2 logs school-backend --lines 100
+curl -i http://127.0.0.1:19421/api/health
+```
+
+```
+::contentReference[oaicite:0]{index=0}
 ```
