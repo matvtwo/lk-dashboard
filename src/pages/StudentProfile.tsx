@@ -52,7 +52,7 @@ export default function StudentProfile() {
   return (
     <div className="student-root">
       <div className="student-header">
-        <h1 className="student-title">Профиль ученика</h1>
+        <h1 className="student-title">Профиль + {(profile.role || "")}</h1>
         <div className="student-subtitle">{profile.email}</div>
       </div>
 

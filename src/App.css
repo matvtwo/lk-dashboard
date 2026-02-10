@@ -1,4 +1,4 @@
-.topnav{
+.topnav {
   position: sticky;
   top: 0;
   z-index: 50;
@@ -6,34 +6,34 @@
   display: flex;
   gap: 12px;
 
-  background: rgba(251,248,241,.85);
+  background: rgba(251, 248, 241, 0.85);
   border-bottom: 1px solid var(--border);
   backdrop-filter: blur(6px);
 }
 
-.topnav__brand{
+.topnav__brand {
   font-family: var(--font-display);
   font-weight: 700;
-  letter-spacing: .3px;
+  letter-spacing: 0.3px;
   margin-right: 10px;
-  opacity: .95;
+  opacity: 0.95;
 }
 
-.topnav__link{
+.topnav__link {
   font-family: var(--font-display);
   color: var(--muted);
 }
-.topnav__link:hover{
+.topnav__link:hover {
   color: var(--text);
 }
 
 /* ===== Admin Layout ===== */
-.admin{
+.admin {
   min-height: 100vh;
   padding: 28px 20px;
 }
 
-.admin__header{
+.admin__header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -43,53 +43,94 @@
   padding: 16px 18px;
   border-radius: 18px;
 
-  background: rgba(255,255,255,.06);
-  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(14px);
 }
 
-.admin__title{
+.admin__title {
   margin: 0;
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 28px;
-  letter-spacing: .3px;
+  letter-spacing: 0.3px;
 }
 
-.admin__actions{
+.admin__actions {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
   align-items: center;
 }
 
-.admin__content{
+.admin__content {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
-.card{
+.card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-1);
   padding: 18px;
 }
-.card:hover{
+.card:hover {
   transform: translateY(-1px);
   box-shadow: var(--shadow-2);
 }
-.card--item{
+.card--dragging:hover {
+  transform: none;
+}
+
+.card--item {
+  will-change: transform;
+  transform-origin: center center;
   padding: 10px 12px;
   border-radius: 10px;
   border: 1px solid var(--border);
   background: var(--surface2);
   cursor: grab;
 }
+.card__content {
+  display: flex;
+  align-items: center; /* vertical center */
+  flex-direction: row; /* force horizontal */
+  flex-wrap: nowrap; /* 🚫 never wrap */
+  gap: 8px;
+  width: 100%;
+}
 
+.card__text {
+  flex: 1 1 auto;
+  min-width: 0; /* ⭐ REQUIRED for ellipsis */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
-.card--dragging{
-  box-shadow: 0 12px 30px rgba(0,0,0,.25);
+.card__options {
+  flex: 0 0 auto; /* never shrink */
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+  opacity: 0.7;
+}
+
+.card__options:hover {
+  opacity: 1;
+}
+.card--drag-overlay {
+  pointer-events: none;
+  opacity: 0.95;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+  transform: scale(1.03);
+}
+
+.card--dragging {
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
   transform: rotate(-1deg);
 }
 
@@ -98,13 +139,25 @@
   border-radius: 12px;
   border: 1px dashed var(--border);
   color: var(--muted);
-  background: rgba(255,255,255,.04);
+  background: rgba(255, 255, 255, 0.04);
 }
 body.student-mode #root {
   background:
-    radial-gradient(300px 220px at 10% 20%, rgba(255,170,200,.35), transparent 60%),
-    radial-gradient(280px 220px at 90% 30%, rgba(150,220,200,.35), transparent 60%),
-    radial-gradient(320px 260px at 50% 90%, rgba(170,180,255,.30), transparent 60%),
+    radial-gradient(
+      300px 220px at 10% 20%,
+      rgba(255, 170, 200, 0.35),
+      transparent 60%
+    ),
+    radial-gradient(
+      280px 220px at 90% 30%,
+      rgba(150, 220, 200, 0.35),
+      transparent 60%
+    ),
+    radial-gradient(
+      320px 260px at 50% 90%,
+      rgba(170, 180, 255, 0.3),
+      transparent 60%
+    ),
     linear-gradient(180deg, #fff7e8, #f1e2c8);
 }
 
@@ -112,9 +165,21 @@ body.student-mode #root {
 #body.student-mode {
   min-height: 100vh;
   background:
-    radial-gradient(300px 220px at 10% 20%, rgba(255,170,200,.35), transparent 60%),
-    radial-gradient(280px 220px at 90% 30%, rgba(150,220,200,.35), transparent 60%),
-    radial-gradient(320px 260px at 50% 90%, rgba(170,180,255,.30), transparent 60%),
+    radial-gradient(
+      300px 220px at 10% 20%,
+      rgba(255, 170, 200, 0.35),
+      transparent 60%
+    ),
+    radial-gradient(
+      280px 220px at 90% 30%,
+      rgba(150, 220, 200, 0.35),
+      transparent 60%
+    ),
+    radial-gradient(
+      320px 260px at 50% 90%,
+      rgba(170, 180, 255, 0.3),
+      transparent 60%
+    ),
     linear-gradient(180deg, #fff7e8, #f1e2c8);
 }
 
@@ -131,10 +196,10 @@ body.student-mode #root {
   max-width: 900px;
   margin: 0 auto 24px;
   padding: 16px;
-  background: rgba(255,255,255,.7);
+  background: rgba(255, 255, 255, 0.7);
   border-radius: 20px;
   text-align: center;
-  box-shadow: 0 12px 30px rgba(0,0,0,.12);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
 }
 
 .sp-title {
@@ -143,7 +208,7 @@ body.student-mode #root {
 }
 
 .sp-subtitle {
-  opacity: .7;
+  opacity: 0.7;
 }
 
 /* ===== СЕТКА ===== */
@@ -157,10 +222,10 @@ body.student-mode #root {
 
 /* ===== КАРТОЧКИ ===== */
 .sp-card {
-  background: rgba(255,255,255,.75);
+  background: rgba(255, 255, 255, 0.75);
   border-radius: 22px;
   padding: 18px;
-  box-shadow: 0 16px 40px rgba(0,0,0,.14);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.14);
 }
 
 .sp-cardTitle {
@@ -176,7 +241,7 @@ body.student-mode #root {
   border-radius: 14px;
 }
 .sp-check:hover {
-  background: rgba(170,180,255,.18);
+  background: rgba(170, 180, 255, 0.18);
 }
 
 /* ===== ДИНОЗАВР ===== */
@@ -184,7 +249,9 @@ body.student-mode #root {
   font-size: 48px;
   text-align: center;
 }
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
   margin: 0;
 }
@@ -192,9 +259,54 @@ html, body, #root {
 /* ЕДИНСТВЕННОЕ МЕСТО, ГДЕ РИСУЕМ ФОН */
 body.student-mode #root {
   background:
-    radial-gradient(300px 220px at 10% 20%, rgba(255,170,200,.35), transparent 60%),
-    radial-gradient(280px 220px at 90% 30%, rgba(150,220,200,.35), transparent 60%),
-    radial-gradient(320px 260px at 50% 90%, rgba(170,180,255,.30), transparent 60%),
+    radial-gradient(
+      300px 220px at 10% 20%,
+      rgba(255, 170, 200, 0.35),
+      transparent 60%
+    ),
+    radial-gradient(
+      280px 220px at 90% 30%,
+      rgba(150, 220, 200, 0.35),
+      transparent 60%
+    ),
+    radial-gradient(
+      320px 260px at 50% 90%,
+      rgba(170, 180, 255, 0.3),
+      transparent 60%
+    ),
     linear-gradient(180deg, #fff7e8, #f1e2c8);
 }
-    
+/* ===== Group delete (hover only) ===== */
+
+/* hidden by default */
+.card--group .group-delete-btn {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(4px);
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
+}
+
+/* visible only on hover */
+.card--group:hover .group-delete-btn {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
+}
+
+/* button look – matches existing palette */
+.group-delete-btn {
+  border: none;
+  background: transparent;
+  color: var(--danger);
+  font-size: 16px;
+  line-height: 1;
+  padding: 2px 4px;
+  cursor: pointer;
+  opacity: 0.85;
+}
+
+.group-delete-btn:hover {
+  opacity: 1;
+}

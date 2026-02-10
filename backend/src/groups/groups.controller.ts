@@ -3,16 +3,18 @@ import {
   Controller,
   Get,
   Post,
+  Delete,
+  Param,
   Req,
   UseGuards,
 } from '@nestjs/common';
+
 import { Request } from 'express';
 import { GroupsService } from './groups.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/roles.decorator';
 import { Role } from '../auth/roles.enum';
-
 interface JwtRequest extends Request {
   user: {
     sub: string;
@@ -29,6 +31,23 @@ export class GroupsController {
   @Get()
   list(@Req() req: JwtRequest) {
     return this.groups.list(req.user.sub);
+  }
+
+  @Get('teachers')
+  teachers(@Req() req: any) {
+    return this.groups.teachers(req.user.sub);
+  }
+
+  @Post('set-teacher')
+  setTeacher(
+    @Req() req: any,
+    @Body() body: { groupId: string; teacherId?: string | null },
+  ) {
+    return this.groups.setTeacher(
+      body.groupId,
+      body.teacherId ?? null,
+      req.user.sub,
+    );
   }
 
   @Get('free-students')
@@ -69,5 +88,9 @@ export class GroupsController {
       body.userId,
       req.user.sub,
     );
+  }
+  @Delete(':id')
+  async delete(@Req() req: JwtRequest, @Param('id') id: string) {
+    return this.groups.deleteGroup(id, req.user.sub);
   }
 }

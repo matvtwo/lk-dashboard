@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { AdminApi } from '../api/admin';
+import { useState } from "react";
+import { AdminApi } from "../api/admin";
 
 type Student = {
   id: string;
@@ -26,16 +26,16 @@ export default function StudentModal({
       setError(null);
       await AdminApi.changeStudentEmail(student.id, email);
       onUpdated();
-      alert('Email сохранён');
+      alert("Email сохранён");
     } catch (e: any) {
-      setError(e.message ?? 'Ошибка');
+      setError(e.message ?? "Ошибка");
     } finally {
       setLoading(false);
     }
   }
 
   async function resetPassword() {
-    if (!confirm('Сбросить пароль ученика?')) return;
+    if (!confirm("Сбросить пароль ученика?")) return;
 
     try {
       setLoading(true);
@@ -43,7 +43,28 @@ export default function StudentModal({
       const res = await AdminApi.resetStudentPassword(student.id);
       setTempPassword(res.tempPassword);
     } catch (e: any) {
-      setError(e.message ?? 'Ошибка');
+      setError(e.message ?? "Ошибка");
+    } finally {
+      setLoading(false);
+    }
+  }
+  async function deleteStudent() {
+    if (
+      !confirm(
+        "Вы уверены, что хотите удалить ученика?\nЭто действие необратимо.",
+      )
+    )
+      return;
+
+    try {
+      setLoading(true);
+      setError(null);
+      await AdminApi.deleteStudent(student.id);
+      alert("Ученик удалён");
+      onUpdated();
+      onClose();
+    } catch (e: any) {
+      setError(e.message ?? "Ошибка");
     } finally {
       setLoading(false);
     }
@@ -52,40 +73,38 @@ export default function StudentModal({
   return (
     <div
       style={{
-        position: 'fixed',
+        position: "fixed",
         inset: 0,
-        background: 'rgba(0,0,0,0.35)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+        background: "rgba(0,0,0,0.35)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
         zIndex: 1000,
       }}
       onClick={onClose}
     >
       <div
-        onClick={e => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
         style={{
-          background: '#fff',
+          background: "#fff",
           borderRadius: 12,
           padding: 20,
           minWidth: 340,
-          boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
+          boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
         }}
       >
         <h3 style={{ marginTop: 0 }}>Ученик</h3>
 
         {error && (
-          <div style={{ color: '#7a0000', marginBottom: 8 }}>
-            {error}
-          </div>
+          <div style={{ color: "#7a0000", marginBottom: 8 }}>{error}</div>
         )}
 
         <label>
           Email
           <input
             value={email}
-            onChange={e => setEmail(e.target.value)}
-            style={{ width: '100%' }}
+            onChange={(e) => setEmail(e.target.value)}
+            style={{ width: "100%" }}
           />
         </label>
 
@@ -104,11 +123,25 @@ export default function StudentModal({
         {tempPassword && (
           <div style={{ marginTop: 12 }}>
             <b>Временный пароль:</b>
-            <div style={{ fontSize: 18, letterSpacing: 2 }}>
-              {tempPassword}
-            </div>
+            <div style={{ fontSize: 18, letterSpacing: 2 }}>{tempPassword}</div>
           </div>
         )}
+        <div style={{ marginTop: 16 }}>
+          <button
+            onClick={deleteStudent}
+            disabled={loading}
+            style={{
+              background: "#b00020",
+              color: "#fff",
+              border: "none",
+              padding: "8px 12px",
+              borderRadius: 6,
+              cursor: "pointer",
+            }}
+          >
+            Удалить ученика
+          </button>
+        </div>
 
         <div style={{ marginTop: 16 }}>
           <button onClick={onClose}>Закрыть</button>

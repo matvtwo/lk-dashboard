@@ -8,9 +8,10 @@ import { AuditModule } from './audit/audit.module';
 import { StudentModule } from './student/student.module';
 import { SeedModule } from './seed/seed.module';
 import { TeacherModule } from './teacher/teacher.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
-  imports: [PrismaModule, AuthModule, GroupsModule, AuditModule,StudentModule,  SeedModule, TeacherModule,],
+  imports: [PrismaModule, AuthModule, GroupsModule, AuditModule,StudentModule,  SeedModule, TeacherModule,AdminModule],
   controllers: [HealthController, AdminController],
 })
 export class AppModule {}

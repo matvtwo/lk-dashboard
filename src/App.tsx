@@ -1,20 +1,26 @@
-import { Routes, Route, Navigate, Link } from 'react-router-dom';
-import { useState } from 'react';
+import { Routes, Route, Navigate, Link } from "react-router-dom";
+import { useState } from "react";
 
-import GroupsBoard from './admin/pages/GroupsBoard';
-import AuditPage from './admin/pages/AuditPage';
-import LoginPage from './pages/Login';
-import StudentProfile from './pages/StudentProfile';
-import { useAuth } from './context/AuthContext';
-import TeacherGroups from './pages/teacher/TeacherGroups';
-import TeacherGroup from './pages/teacher/TeacherGroup';
-
+import GroupsBoard from "./admin/pages/GroupsBoard";
+import AuditPage from "./admin/pages/AuditPage";
+import LoginPage from "./pages/Login";
+import StudentProfile from "./pages/StudentProfile";
+import { useAuth } from "./context/AuthContext";
+import TeacherGroups from "./pages/teacher/TeacherGroups";
+import { TeachersBoard } from "./admin/pages/TeachersBoard"; // CORRECT
+import TeacherGroup from "./pages/teacher/TeacherGroup";
 function hasToken() {
-  const t = localStorage.getItem('token');
-  return typeof t === 'string' && t.length > 20 && t !== 'null';
+  const t = localStorage.getItem("token");
+  return typeof t === "string" && t.length > 20 && t !== "null";
 }
 
-function Protected({ authed, children }: { authed: boolean; children: JSX.Element }) {
+function Protected({
+  authed,
+  children,
+}: {
+  authed: boolean;
+  children: JSX.Element;
+}) {
   return authed ? children : <Navigate to="/login" replace />;
 }
 
@@ -25,47 +31,48 @@ export default function App() {
 
   return (
     <>
-    <button
-  className="topnav__link"
-  onClick={() => {
-    localStorage.removeItem('token');
-    window.location.href = '/login';
-  }}
->
-  Выход
-</button>
-{authed && (
-  <nav className="topnav">
-    {role === 'TEACHER' && (
-  <Link to="/teacher/groups">Мои группы</Link>
-)}
-    {role === 'ADMIN' && (
-      <>
-        <Link to="/admin/groups">Группы</Link>
-        <Link to="/admin/audit">Журнал</Link>
-      </>
-    )}
+      <button
+        className="topnav__link"
+        onClick={() => {
+          localStorage.removeItem("token");
+          window.location.href = "/login";
+        }}
+      >
+        Выход
+      </button>
+      {authed && (
+        <nav className="topnav">
+          {role === "TEACHER" && <Link to="/teacher/groups">Мои группы</Link>}
+          {role === "ADMIN" && (
+            <>
+              <Link to="/admin/groups">Группы</Link>
+              <Link to="/admin/teachers">Учителя</Link>{" "}
+              {/* <--- Add this line */}
+              <Link to="/admin/audit">Журнал</Link>
+            </>
+          )}
 
-    {role === 'STUDENT' && (
-      <Link to="/student/profile">Профиль</Link>
-    )}
+          {role === "STUDENT" && <Link to="/student/profile">Профиль</Link>}
 
-    <button
-      onClick={() => {
-        localStorage.removeItem('token');
-        window.location.href = '/login';
-      }}
-    >
-      Выход
-    </button>
-  </nav>
-)}
+          <button
+            onClick={() => {
+              localStorage.removeItem("token");
+              window.location.href = "/login";
+            }}
+          >
+            Выход
+          </button>
+        </nav>
+      )}
 
       <Routes>
-        <Route path="/login" element={<LoginPage onLogin={() => setAuthed(true)} />} />
+        <Route
+          path="/login"
+          element={<LoginPage onLogin={() => setAuthed(true)} />}
+        />
 
         <Route path="/" element={<Navigate to="/student/profile" replace />} />
-
+        <Route path="/admin/teachers" element={<TeachersBoard />} />
         <Route
           path="/admin/groups"
           element={
@@ -93,22 +100,22 @@ export default function App() {
           }
         />
         <Route
-  path="/teacher/groups"
-  element={
-    <Protected authed={authed}>
-      <TeacherGroups />
-    </Protected>
-  }
-/>
+          path="/teacher/groups"
+          element={
+            <Protected authed={authed}>
+              <TeacherGroups />
+            </Protected>
+          }
+        />
 
-<Route
-  path="/teacher/groups/:id"
-  element={
-    <Protected authed={authed}>
-      <TeacherGroup />
-    </Protected>
-  }
-/>
+        <Route
+          path="/teacher/groups/:id"
+          element={
+            <Protected authed={authed}>
+              <TeacherGroup />
+            </Protected>
+          }
+        />
       </Routes>
     </>
   );
