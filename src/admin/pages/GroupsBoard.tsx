@@ -111,7 +111,7 @@ export default function GroupsBoard() {
 
   return (
     <AdminLayout
-      title="Админ-панель"
+      title="Админ-панель:группы"
       actions={
         <>
           <CreateStudent onCreated={load} />

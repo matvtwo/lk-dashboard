@@ -81,7 +81,7 @@ export const TeachersBoard = () => {
 
   return (
     <AdminLayout
-      title="Распределение учителей"
+      title="Админ-панель:учителя"
       actions={<CreateTeacher onCreated={loadData} />}
     >
       {error && (
